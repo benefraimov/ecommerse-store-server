@@ -60,7 +60,7 @@ const addOrderItems = async (req, res) => {
 
         // הקוד הקיים שלך לשליחת המייל - נשאר ללא שינוי
         try {
-            const message = `<h1>תודה על הזמנתך!</h1><p>הזמנתך מספר ${createdOrder._id} התקבלה בהצלחה ותטופל בקרוב.</p><p>ניתן לצפות בפרטי ההזמנה בקישור הבא:</p><a href="${process.env.FRONTEND_URL}/order/${createdOrder._id}">צפה בהזמנה</a>`;
+            const message = `<h1>תודה על הזמנתך!</h1><p>הזמנתך מספר ${createdOrder._id} התקבלה בהצלחה ותטופל בקרוב.</p><p>ניתן לצפות בפרטי ההזמנה בקישור הבא:</p><a href="${process.env.FRONTEND_URL_STORE}/order/${createdOrder._id}">צפה בהזמנה</a>`;
             await sendEmail({
                 email: req.user.email,
                 subject: `אישור הזמנה #${createdOrder._id}`,

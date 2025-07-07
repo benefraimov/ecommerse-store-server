@@ -27,8 +27,8 @@ const PORT = process.env.PORT || 5001;
 // --- הגדרת CORS מאובטחת ---
 // רשימת הכתובות המורשות לגשת לשרת
 const whitelist = [
-    process.env.FRONTEND_URL, // כתובת החנות
-    'http://localhost:5174'     // כתובת הפיתוח של ה-CRM (יכול להיות פורט אחר)
+    process.env.FRONTEND_URL_STORE,
+    process.env.FRONTEND_URL_CRM,
 ];
 
 const corsOptions = {

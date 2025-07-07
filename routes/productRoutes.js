@@ -7,9 +7,7 @@ const router = express.Router()
 router.route('/')
     .get(getProducts)
     .post(protect, admin, createProduct)
-
 router.get('/admin', protect, admin, getAdminProducts);
-
 router.get('/top', getTopProducts);
 // Dynamic paths with (:id) must be written after static paths
 // To prevent conflicts

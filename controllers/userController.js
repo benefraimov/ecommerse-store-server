@@ -69,7 +69,7 @@ const verifyUser = async (req, res) => {
     await user.save();
 
     // נבצע redirect לדף אישור בצד הלקוח
-    res.redirect('http://localhost:5173/verification-success');
+    res.redirect(`${process.env.FRONTEND_URL_STORE}/verification-success`);
 };
 // @desc    Forgot password
 // @route   POST /api/users/forgotpassword
@@ -89,7 +89,7 @@ const forgotPassword = async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     try {
-        const resetUrl = `${req.protocol}://localhost:5173/reset-password/${resetToken}`;
+        const resetUrl = `${process.env.FRONTEND_URL_STORE}/reset-password/${resetToken}`;
         const message = `<p>קיבלת בקשה לאיפוס סיסמה. לחץ על הקישור הבא כדי להמשיך (הקישור בתוקף ל-10 דקות):</p> <a href="${resetUrl}">${resetUrl}</a>`;
 
         await sendEmail({
