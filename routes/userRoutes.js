@@ -1,29 +1,28 @@
-import express from 'express'
-import { body, validationResult } from 'express-validator'
+import express from 'express';
+import { body, validationResult } from 'express-validator';
+
 import {
-    deleteUserAccount,
-    forgotPassword,
-    getUserById,
-    getUserCart,
-    getUserProfile,
-    getUsers,
+    registerUser,
+    loginUser,
     loginAdminStep1,
     loginAdminStep2,
-    loginUser,
-    registerUser,
+    verifyUser,
+    forgotPassword,
     resetPassword,
-    updateUserCart,
+    getUsers,
+    getUserProfile,
     updateUserProfile,
-    verifyUser
+    deleteUserAccount,
+    getUserById,
+    getUserCart,
+    updateUserCart
 } from '../controllers/userController.js';
-import {
-    admin,
-    protect
-} from '../middleware/authMiddleware.js';
 
-const router = express.Router()
+import { protect, admin } from '../middleware/authMiddleware.js';
 
-// פונקציית middleware לבדיקת תוצאות הולידציה
+const router = express.Router();
+
+// פונקציית middleware לטיפול בשגיאות ולידציה
 const validateRequest = (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -32,11 +31,9 @@ const validateRequest = (req, res, next) => {
     next();
 };
 
-router.get('/', protect, admin, getUsers);
+// --- נתיבי אימות ציבוריים ---
 router.post('/login', loginUser);
-// נתיב התחברות למנהלים
-router.post('/admin/login', loginAdminStep1);
-router.post('/admin/verify', loginAdminStep2);
+
 router.post('/register',
     [
         body('username', 'שם המשתמש הוא שדה חובה').not().isEmpty(),
@@ -44,17 +41,34 @@ router.post('/register',
         body('password', 'הסיסמה חייבת להכיל לפחות 6 תווים').isLength({ min: 6 })
     ],
     validateRequest,
-    registerUser);
-router.route('/cart')
-    .get(protect, getUserCart)
-    .post(protect, updateUserCart);
+    registerUser
+);
+
+router.post('/forgotpassword', forgotPassword);
+router.put('/resetpassword/:token', resetPassword);
+router.get('/verify/:token', verifyUser);
+
+
+// --- נתיבי מנהל (CRM) ---
+router.post('/admin/login', loginAdminStep1);
+router.post('/admin/verify', loginAdminStep2);
+
+// --- נתיבי משתמשים (דורשים הרשאות) ---
 router.route('/profile')
     .get(protect, getUserProfile)
     .put(protect, updateUserProfile)
     .delete(protect, deleteUserAccount);
-router.post('/forgotpassword', forgotPassword);
-router.get('/verify/:token', verifyUser);
-router.put('/resetpassword/:token', resetPassword);
-router.route('/:id').get(protect, admin, getUserById);
+
+router.route('/cart')
+    .get(protect, getUserCart)
+    .post(protect, updateUserCart);
+
+// --- נתיבי ניהול (דורשים הרשאות מנהל) ---
+router.route('/')
+    .get(protect, admin, getUsers);
+
+router.route('/:id')
+    .get(protect, admin, getUserById);
+
 
 export default router;

@@ -270,7 +270,7 @@ const loginUser = async (req, res) => {
 
 // @desc    Admin Login - Step 1: Verify password and send 2FA code
 // @route   POST /api/users/admin/login
-export const loginAdminStep1 = async (req, res) => {
+const loginAdminStep1 = async (req, res) => {
     try {
         const { email, password } = req.body;
         const user = await User.findOne({ email });
@@ -302,7 +302,7 @@ export const loginAdminStep1 = async (req, res) => {
 
 // @desc    Admin Login - Step 2: Verify 2FA code and complete login
 // @route   POST /api/users/admin/verify
-export const loginAdminStep2 = async (req, res) => {
+const loginAdminStep2 = async (req, res) => {
     try {
         const { email, twoFactorCode } = req.body;
         const user = await User.findOne({
@@ -401,5 +401,7 @@ export {
     getUserProfile,
     forgotPassword,
     resetPassword,
-    getUserById
+    getUserById,
+    loginAdminStep1,
+    loginAdminStep2
 };
