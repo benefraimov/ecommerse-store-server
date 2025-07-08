@@ -69,7 +69,8 @@ const verifyUser = async (req, res) => {
     await user.save();
 
     // נבצע redirect לדף אישור בצד הלקוח
-    res.redirect(`${process.env.FRONTEND_URL_STORE}/verification-success`);
+    res.redirect(`${process.env.ENVIRONMENT === "production" ?
+        process.env.FRONTEND_URL_STORE : process.env.FRONTEND_URL_STORE_DEV}/verification-success`);
 };
 // @desc    Forgot password
 // @route   POST /api/users/forgotpassword
@@ -89,7 +90,8 @@ const forgotPassword = async (req, res) => {
     await user.save({ validateBeforeSave: false });
 
     try {
-        const resetUrl = `${process.env.FRONTEND_URL_STORE}/reset-password/${resetToken}`;
+        const resetUrl = `${process.env.ENVIRONMENT === "production" ?
+            process.env.FRONTEND_URL_STORE : process.env.FRONTEND_URL_STORE_DEV}/reset-password/${resetToken}`;
         const message = `<p>קיבלת בקשה לאיפוס סיסמה. לחץ על הקישור הבא כדי להמשיך (הקישור בתוקף ל-10 דקות):</p> <a href="${resetUrl}">${resetUrl}</a>`;
 
         await sendEmail({
@@ -133,7 +135,8 @@ const resetPassword = async (req, res) => {
 // @route   GET /api/users
 // @access  Private/Admin
 const getUsers = async (req, res) => {
-    const users = await User.find({});
+    // הוספנו פילטר שיציג רק משתמשים מאומתים
+    const users = await User.find({ isVerified: true });
     res.json(users);
 }
 
@@ -389,6 +392,17 @@ const getUserById = async (req, res) => {
     }
 };
 
+const toggleAdminStatus = async (req, res) => {
+    const user = await User.findById(req.params.id);
+    if (user) {
+        user.isAdmin = !user.isAdmin;
+        await user.save();
+        res.json({ message: 'Permissions updated' });
+    } else {
+        res.status(404).json({ message: 'User not found' });
+    }
+};
+
 export {
     registerUser,
     verifyUser,
@@ -403,5 +417,6 @@ export {
     resetPassword,
     getUserById,
     loginAdminStep1,
-    loginAdminStep2
+    loginAdminStep2,
+    toggleAdminStatus
 };

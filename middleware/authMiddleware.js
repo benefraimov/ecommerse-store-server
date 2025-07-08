@@ -26,4 +26,11 @@ const admin = (req, res, next) => {
     }
 }
 
-export { protect, admin };
+const superAdmin = (req, res, next) => {
+    if (req.user && req.user.email === (process.env.ENVIRONMENT === "development" ? process.env.SUPER_ADMIN_EMAIL_DEV : process.env.SUPER_ADMIN_EMAIL)) {
+        next();
+    } else {
+        res.status(403).json({ message: 'Super admin access required' });
+    }
+};
+export { protect, admin, superAdmin };

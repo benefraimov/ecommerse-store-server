@@ -27,8 +27,10 @@ const PORT = process.env.PORT || 5001;
 // --- הגדרת CORS מאובטחת ---
 // רשימת הכתובות המורשות לגשת לשרת
 const whitelist = [
-    process.env.FRONTEND_URL_STORE,
-    process.env.FRONTEND_URL_CRM,
+    process.env.ENVIRONMENT === "production" ?
+        process.env.FRONTEND_URL_STORE : process.env.FRONTEND_URL_STORE_DEV,
+    process.env.ENVIRONMENT === "production" ?
+        process.env.FRONTEND_URL_CRM : process.env.FRONTEND_URL_CRM_DEV
 ];
 
 const corsOptions = {

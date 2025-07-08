@@ -15,10 +15,11 @@ import {
     deleteUserAccount,
     getUserById,
     getUserCart,
-    updateUserCart
+    updateUserCart,
+    toggleAdminStatus
 } from '../controllers/userController.js';
 
-import { protect, admin } from '../middleware/authMiddleware.js';
+import { protect, admin, superAdmin } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
@@ -70,5 +71,6 @@ router.route('/')
 router.route('/:id')
     .get(protect, admin, getUserById);
 
+router.put('/:id/toggle-admin', protect, superAdmin, toggleAdminStatus);
 
 export default router;
