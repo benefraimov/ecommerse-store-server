@@ -24,6 +24,9 @@ connectDB()
 const app = express();
 const PORT = process.env.PORT || 5001;
 
+// ✅ חשוב! זה פותר את שגיאת X-Forwarded-For
+app.set('trust proxy', true);
+
 // --- הגדרת CORS מאובטחת ---
 // רשימת הכתובות המורשות לגשת לשרת
 const whitelist = [
