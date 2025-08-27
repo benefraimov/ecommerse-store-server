@@ -8,6 +8,7 @@ import cors from 'cors';
 // Configs
 import path from 'path';
 import dotenv from 'dotenv';
+dotenv.config()
 import { fileURLToPath } from 'url';
 import connectDB from './config/db.js'
 
@@ -18,7 +19,6 @@ import orderRoutes from './routes/orderRoutes.js';
 import uploadRoutes from './routes/uploadRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 
-dotenv.config()
 connectDB()
 
 const app = express();

@@ -19,8 +19,9 @@ const generateToken = (id) => {
 // @access  Public
 const registerUser = async (req, res) => {
     const { username, email, password } = req.body;
+    console.log(username, email, password )
     const userExists = await User.findOne({ email });
-
+    console.log(userExists)
     if (userExists) {
         return res.status(400).json({ message: 'User already exists' });
     }
