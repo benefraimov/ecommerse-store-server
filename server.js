@@ -25,7 +25,7 @@ const app = express();
 const PORT = process.env.PORT || 5001;
 
 // ✅ חשוב! זה פותר את שגיאת X-Forwarded-For
-app.set('trust proxy', true);
+app.set('trust proxy', 'loopback');
 
 // --- הגדרת CORS מאובטחת ---
 // רשימת הכתובות המורשות לגשת לשרת
